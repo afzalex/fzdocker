@@ -1,0 +1,23 @@
+http:
+  routers:
+    dashboard-redirect:
+      rule: (Host(`fzryzen.local`) || Host(`fzryzen`) || Host(`localhost`)) && Path(`/dashboard`)
+      service: noop@internal
+      middlewares:
+        - common-add-slash
+        - common-strip-first
+      priority: 10000
+
+    dashboard-api:
+      rule: (Host(`fzryzen.local`) || Host(`fzryzen`)) && (PathPrefix(`/dashboard/`) || PathPrefix(`/api`))
+      service: api@internal
+      # tls: {}
+      middlewares:
+        - common-redirect-to-https
+        - common-auth
+
+    dashboard-api-unsecured:
+      rule: Host(`localhost`) && (PathPrefix(`/dashboard/`) || PathPrefix(`/api`))
+      service: api@internal
+      middlewares:
+        - common-auth

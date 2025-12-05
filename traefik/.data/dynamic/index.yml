@@ -1,0 +1,22 @@
+# index.yml
+http:
+  routers:
+
+    # Public index accessible from the internet
+    index-public:
+      rule: Host(`fzryzen.afzalex.com`) && Path(`/`)
+      service: fzpublic@docker
+      middlewares:
+        - common-auth
+
+    # Internal index accessible from the local network
+    index-internal:
+      rule: (Host(`fzryzen.local`) || Host(`fzryzen`)) && Path(`/`)
+      service: fzpublic@docker
+      middlewares:
+        - common-redirect-to-https
+
+    # Unsecured index accessible from the local network
+    index-unsecured:
+      rule: Host(`localhost`) && Path(`/`)
+      service: fzpublic@docker
