@@ -1,0 +1,18 @@
+http:
+  routers:
+    dashboard-redirect:
+      rule: Host(`localhost`) && Path(`/dashboard`)
+      service: noop@internal
+      middlewares:
+        - common-add-slash
+        - common-strip-first
+      priority: 10000
+
+    dashboard-api:
+      rule: Host(`localhost`) && (PathPrefix(`/dashboard/`) || PathPrefix(`/api`))
+      service: api@internal
+      # tls: {}
+      middlewares:
+        # Uncomment this to enable HTTPS redirection
+        # - redirect-to-https
+        - common-auth

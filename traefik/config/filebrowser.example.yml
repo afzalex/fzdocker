@@ -1,10 +1,11 @@
 http:
   routers:
     filebrowser:
-      rule: "Host(`fzryzen.local`) && PathPrefix(`/browser`)"
+      rule: Host(`localhost`) && PathPrefix(`/browser`)
       service: filebrowser-service
       middlewares:
-        - common-redirect-to-https
+        # Uncomment this to enable HTTPS redirection
+        # - common-redirect-to-https
 
   services:
     filebrowser-service:

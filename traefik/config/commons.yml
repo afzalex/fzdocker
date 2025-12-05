@@ -8,7 +8,8 @@ http:
     common-auth:
       basicAuth:
         users:
-          - "afzal:$2y$05$h1Rclc8E/cw.qm2NX9NLg.CFaUySErgwWQQcdd6IjhCcv.cKXp3SK"
+          # To create the hash, use the following command (with apache2-utils installed):
+          # htpasswd -nbB admin 'Password@123'
           - "admin:$2y$05$CKPK0fMm4dmx3K0GQTwvn.Tq8pHb/Rv28SFXH1xKLB8/6OD1EH3W2"  # User: admin, Password: Password@123
 
     # 1) Add trailing slash for one-segment paths

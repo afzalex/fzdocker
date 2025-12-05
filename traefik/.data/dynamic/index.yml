@@ -1,8 +1,0 @@
-# index.yml
-http:
-  routers:
-    index:
-      rule: Host(`fzryzen.local`) && Path(`/`)
-      service: fzpublic@docker
-      middlewares:
-        - common-redirect-to-https

@@ -5,15 +5,20 @@ source ../run-preprocess.tpl.sh
 
 # Create .data directory if it doesn't exist
 mkdir -p ./.data
+
+echo "HOST_NAME: ${HOST_NAME}"
     
 # Check if HOST_WORKDIR contains any non-yml files
 if ls "${HOST_WORKDIR}"/* >/dev/null 2>&1 && find "${HOST_WORKDIR}" -type f ! -name "*.yml" -print -quit | grep -q .; then
     TRAEFIK_DYNAMIC_CONFIGS_DIR="./.data/dynamic"
     # Create dynamic directory if it doesn't exist
     mkdir -p "${TRAEFIK_DYNAMIC_CONFIGS_DIR}"
-    # Copy dashboard.example.yml to dynamic config directory if it doesn't exist
+    # Add common.yml and other example config files if config directory is empty
     if ! ls "${TRAEFIK_DYNAMIC_CONFIGS_DIR}"/*.yml >/dev/null 2>&1; then
-        cp dashboard.example.yml "${TRAEFIK_DYNAMIC_CONFIGS_DIR}/dashboard.yml"
+        cp config/commons.yml "${TRAEFIK_DYNAMIC_CONFIGS_DIR}/commons.yml"
+        for file in config/*.example.yml; do
+            cp "${file}" "${TRAEFIK_DYNAMIC_CONFIGS_DIR}/$(basename "${file/.example/}")"
+        done
     fi
 else
     TRAEFIK_DYNAMIC_CONFIGS_DIR="${HOST_WORKDIR}"
@@ -23,7 +28,7 @@ echo "TRAEFIK_DYNAMIC_CONFIGS_DIR: ${TRAEFIK_DYNAMIC_CONFIGS_DIR}"
 
 # Copy traefik.yml to .data directory if it doesn't exist
 if [ ! -f "./.data/traefik.yml" ]; then
-    cp traefik.yml ./.data/traefik.yml
+    cp config/traefik.yml ./.data/traefik.yml
 fi
 
 # Create certs directory if it doesn't exist
