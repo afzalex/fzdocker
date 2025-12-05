@@ -1,0 +1,17 @@
+http:
+  routers:
+    filebrowser:
+      rule: (Host(`fzryzen.local`) || Host(`fzryzen`)) && PathPrefix(`/browser`)
+      service: filebrowser-service
+      middlewares:
+        - common-redirect-to-https
+
+    filebrowser-unsecured:
+      rule: Host(`localhost`) && PathPrefix(`/browser`)
+      service: filebrowser-service
+
+  services:
+    filebrowser-service:
+      loadBalancer:
+        servers:
+          - url: "http://fzfilebrowser/browser"

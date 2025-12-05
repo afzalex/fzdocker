@@ -1,0 +1,32 @@
+## traefik.yml
+
+# Docker configuration backend
+providers:
+  docker:
+    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)"
+  file:
+    directory: "/etc/traefik/dynamic"
+    watch: true
+
+
+# API and dashboard configuration
+api: {}
+  # insecure: true
+
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+    http:
+      tls: {}
+
+log:
+  level: DEBUG
+  # filePath: "stdout"
+
+accessLog:
+  # filePath: "stdout"
+  format: "common"
+
+  

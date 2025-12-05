@@ -1,0 +1,26 @@
+http:
+  middlewares:
+    common-redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+    common-auth:
+      basicAuth:
+        users:
+          # To create the hash, use the following command (with apache2-utils installed):
+          # htpasswd -nbB admin 'Password@123'
+          - "afzal:$2y$05$h1Rclc8E/cw.qm2NX9NLg.CFaUySErgwWQQcdd6IjhCcv.cKXp3SK"
+          - "admin:$2y$05$CKPK0fMm4dmx3K0GQTwvn.Tq8pHb/Rv28SFXH1xKLB8/6OD1EH3W2"  # User: admin, Password: Password@123
+
+    # 1) Add trailing slash for one-segment paths
+    common-add-slash:
+      redirectRegex:
+        regex: ^(https?://[^/]+/[^/?#]+)([?#]?.*)$
+        replacement: ${1}/${2}
+        permanent: true
+
+    # 2) Strip the first segment from the path
+    common-strip-first:
+      stripPrefixRegex:
+        regex: ^/[^/?#]+
