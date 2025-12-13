@@ -1,4 +1,0 @@
-[submodule "docker-survival-tool"]
-	path = docker-survival-tool
-	url = git@github.com:afzalex/docker-survival-tool.git
-	branch = main
