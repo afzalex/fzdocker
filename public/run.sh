@@ -7,10 +7,10 @@ source ../run-preprocess.tpl.sh
 mkdir -p ./.data
 
 # Copy index.html to .data/html if it doesn't exist
-if [ ! -f ./.data/html/index.html ]; then
-    echo "Copying index.html to .data/html..."
-    mkdir -p ./.data/html
-    cp ./index.html ./.data/html/
+if [ ! -f ./.data/config.yaml ] && [ -f ./config.yaml ]; then
+    echo "Copying config.yaml to .data..."
+    mkdir -p ./.data
+    cp ./config.yaml ./.data/config.yaml
 fi
 
 
@@ -26,7 +26,7 @@ docker run --name ${CONTAINER_NAME} -it \
     --env-file ".env" \
     -p ${PORT_MAPPING}:80 \
     $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
-    -v ./.data/html:/usr/share/nginx/html \
+    -v ./.data/config.yaml:/usr/share/caddy/config.yaml \
     ${CONTAINER_NAME}
     
 

@@ -1,3 +1,3 @@
-FROM nginx:stable-alpine
+FROM afzalex/fzlaunchpad4:latest
 
 EXPOSE 80

@@ -1,0 +1,66 @@
+server:
+  name: "example server"
+  subtitle: "Subtitle of the server"
+
+services:
+  - name: "Traefik Dashboard"
+    description: "Traefik dashboard for viewing the status of the services"
+    icon: "FaServer"
+    url: "/dashboard"
+    healthCheckUrl: "/dashboard/api/health"
+  - name: "Test Service 2"
+    description: "Test service 2"
+    icon: "FaServer"
+    url: "http://localhost:5173"
+    healthCheckUrl: "http://localhost:5173/health"
+  - name: "Test Service 3"
+    description: "Test service 3 (without url)"
+    icon: "FaServer"
+    healthCheckUrl: "http://localhost:5173/health"
+
+
+footer:
+  enabled: true                  # Show/hide footer
+  items:
+    - type: "text"
+      content: "© {year} Launchpad"    # Use {year} for current year
+    - type: "link"
+      label: "Documentation"
+      url: "https://example.com/docs"
+    - type: "text"
+      content: "|"
+    - type: "link"
+      label: "GitHub"
+      url: "https://github.com/afzalex/fzlaunchpad"
+
+theme:
+  backgroundImage:
+    url: "/images/background.jpg"  # Background image URL (e.g., "/images/bg.jpg" or "https://example.com/bg.jpg")
+    opacity: 1                    # Background image opacity (0.0 to 1.0)
+    position: "center"              # Background position (center, top, bottom, left, right, etc.)
+    size: "cover"                  # Background size (cover, contain, auto, etc.)
+    repeat: "no-repeat"            # Background repeat (no-repeat, repeat, repeat-x, repeat-y)
+  colors:
+    background: "#ecebe4aa"        # Main page background (lightest)
+    cardBackground: "#dddbcdff"     # Service card backgrounds
+    mediumAccent: "#2D531A"      # Borders and medium accents
+    darkAccent: "#EEEEEE"         # Darker borders and accents
+    text: "#071E07"              # Text color (darkest)
+    headerBackground: "#dddbcd99"  # Header background color
+    headerText: "#071E07"        # Header text color
+    footerBackground: "#dddbcd99"  # Footer background color
+    footerText: "#071E07"        # Footer text color
+    serviceStatus:
+      # Service Status Name to Color Mappings
+      "running": "#009d24"       # Running service color
+      "stopped": "#808080"       # Stopped service color
+      "error": "#ef4444"         # Error service color
+      "warning": "#f59e0b"       # Warning service color
+
+statusMapping:
+  # HTTP Status Code to Service Status Name Mappings
+  "0": "stopped"     
+  "200-299": "running"
+  "300-399": "uknown"
+  "400-499": "error"
+  "500-599": "warning"
