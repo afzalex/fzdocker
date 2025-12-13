@@ -1,3 +1,3 @@
-FROM afzalex/fzlaunchpad4:latest
+FROM afzalex/fzlaunchpad:latest
 
 EXPOSE 80

@@ -51,16 +51,20 @@ theme:
     footerBackground: "#dddbcd99"  # Footer background color
     footerText: "#071E07"        # Footer text color
     serviceStatus:
-      # Service Status Name to Color Mappings
-      "running": "#009d24"       # Running service color
-      "stopped": "#808080"       # Stopped service color
-      "error": "#ef4444"         # Error service color
-      "warning": "#f59e0b"       # Warning service color
+      # HTTP Status Code to Color Mappings
+      "0": "#808080"             # Status code 0 (stopped/unreachable) color
+      "200-299": "#009d24"       # Status codes 200-299 (success) color
+      "300-399": "#3b82f6"       # Status codes 300-399 (redirect) color
+      "401": "#009d24"            # Status code 401 (secured) color
+      "400-499": "#ef4444"       # Status codes 400-499 (client error) color
+      "500-599": "#f59e0b"       # Status codes 500-599 (server error) color
+
 
 statusMapping:
   # HTTP Status Code to Service Status Name Mappings
   "0": "stopped"     
   "200-299": "running"
   "300-399": "uknown"
+  "401": "Running (Secured)"
   "400-499": "error"
   "500-599": "warning"
