@@ -1,0 +1,98 @@
+server:
+  name: "fzmacair"
+  # subtitle: "Macbook Air of Mohammad Afzal"
+  subtitle: 
+    - type: "text"
+      content: "Macbook Air of"
+    - type: "link"
+      label: "Mohammad Afzal"
+      url: "https://afzalex.com"
+
+services:
+  - name: "Traefik Dashboard"
+    description: "Traefik dashboard for viewing the status of the services"
+    icon: "MdHub"
+    url: "/dashboard"
+    healthCheckUrl: "/dashboard/"
+  - name: "File Browser"
+    description: "File browser for viewing the files in the server"
+    icon: "MdFolderOpen"
+    url: "/browser/"
+    healthCheckUrl: "/browser"
+  - name: "Youtube Downloader"
+    description: "Download videos from Youtube"
+    icon: "FaYoutube"
+    url: "/metube"
+    healthCheckUrl: "/metube/"
+  - name: "Paperless"
+    description: "Document management system"
+    icon: "MdDescription"
+    url: "/paperless"
+    healthCheckUrl: "/paperless/"
+  - name: "Immich"
+    description: "Self-hosted photo and video backup solution"
+    icon: "MdPhotoLibrary"
+    url: "http://fzmacair.local:2283"
+    healthCheckUrl: "http://fzmacair.local:2283"
+
+
+footer:
+  enabled: true                    # Show/hide footer
+  content: 
+    - type: "link"
+      label: "Internal Version"
+      url: "https://fzmacair.local"
+      target: "_self"
+    - type: "text"
+      content: "|"
+    - type: "link"
+      label: "Tailscale Version"
+      url: "https://fzmacair"
+      target: "_self"
+    - type: "text"
+      content: "|"
+    - type: "link"
+      label: "Internet Version"
+      url: "https://fzmacair.afzalex.com"
+      target: "_self"
+
+
+theme:
+  backgroundImage:
+    url: "/images/background3.jpg"  # Background image URL (e.g., "/images/bg.jpg" or "https://example.com/bg.jpg")
+    opacity: 1                      # Background image opacity (0.0 to 1.0)
+    position: "center"              # Background position (center, top, bottom, left, right, etc.)
+    size: "cover"                   # Background size (cover, contain, auto, etc.)
+    repeat: "no-repeat"             # Background repeat (no-repeat, repeat, repeat-x, repeat-y)
+  colors:
+    background: "#bebfbe"           # Main page background (lightest)
+    cardBackground: "#dedede"       # Service card backgrounds
+    mediumAccent: "#2D531A"         # Borders and medium accents
+    darkAccent: "#EEEEEE"           # Darker borders and accents
+    text: "#071E07"                 # Text color (darkest)
+    headerBackground: "#fcfffeaa"   # Header background color
+    headerText: "#071E07"           # Header text color
+    footerBackground: "#c9c9c9aa"   # Footer background color
+    footerText: "#000000"           # Footer text color
+    serviceStatus:
+      # HTTP Status Code to Color Mappings
+      "0": "#808080"                # Status code 0 (stopped/unreachable) color
+      "401": "#009d24"              # Status code 401 (secured) color
+      "302": "#009d24"              # Status code 302 (secured redirect) color
+      "404": "#808080"              # Status code 404 (not available) color
+      "200-299": "#009d24"          # Status codes 200-299 (success) color
+      "300-399": "#3b82f6"          # Status codes 300-399 (redirect) color
+      "400-499": "#ef4444"          # Status codes 400-499 (client error) color
+      "500-599": "#f59e0b"          # Status codes 500-599 (server error) color
+      "checking": "#808080"         # Status code checking (checking) color
+
+statusMapping:
+  # HTTP Status Code to Service Status Name Mappings
+  "0": "stopped"     
+  "401": "Running (Secured)"
+  "302": "Running (Secured Redirect)"
+  "404": "Not Available"
+  "200-299": "running"
+  "300-399": "uknown"
+  "400-499": "error"
+  "500-599": "warning"

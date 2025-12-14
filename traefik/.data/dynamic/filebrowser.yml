@@ -1,0 +1,30 @@
+http:
+  routers:
+    filebrowser-public:
+      rule: Host(`fzmacair.afzalex.com`) && PathPrefix(`/browser`)
+      service: filebrowser-service
+      middlewares:
+        - oidc-auth
+
+    filebrowser-internal:
+      rule: Host(`fzmacair.local`) && PathPrefix(`/browser`)
+      service: filebrowser-service
+      middlewares:
+        - common-redirect-to-https
+        - common-auth
+
+    filebrowser-private:
+      rule: Host(`fzmacair`) && PathPrefix(`/browser`)
+      service: filebrowser-service
+      middlewares:
+        - common-redirect-to-https
+
+    filebrowser-local:
+      rule: (Host(`localhost`)) && PathPrefix(`/browser`)
+      service: filebrowser-service
+
+  services:
+    filebrowser-service:
+      loadBalancer:
+        servers:
+          - url: "http://fzfilebrowser/browser"

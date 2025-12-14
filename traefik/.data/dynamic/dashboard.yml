@@ -1,0 +1,33 @@
+http:
+  routers:
+
+    dashboard-personal:
+      rule: Host(`fzmacair`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
+      service: api@internal
+      middlewares:
+        - common-redirect-to-https
+
+    dashboard-internal:
+      rule: Host(`fzmacair.local`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
+      service: api@internal
+      middlewares:
+        - common-redirect-to-https
+        - common-auth
+    
+    dashboard-public:
+      rule: Host(`fzmacair.afzalex.com`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
+      service: api@internal
+      middlewares:
+        - oidc-auth
+
+    dashboard-local:
+      rule: Host(`localhost`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
+      service: api@internal
+
+    dashboard-redirect:
+      rule: Path(`/dashboard`)
+      service: noop@internal
+      middlewares:
+        - common-add-slash
+        - common-strip-first
+      priority: 10000
