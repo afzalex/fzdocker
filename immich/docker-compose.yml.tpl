@@ -53,6 +53,8 @@ ${REDIS_DEPENDS_ON}
     env_file:
       - public.env
       - .env
+    ports:
+      - "${PORT_MAPPING_ML:-3003}:3003"
     healthcheck:
       disable: false
 

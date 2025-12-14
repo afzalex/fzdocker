@@ -1,0 +1,21 @@
+http:
+  routers:
+    paperless-public:
+      rule: Host(`fzmacair.afzalex.com`) && PathPrefix(`/paperless`)
+      service: paperless-service
+
+    paperless-internal:
+      rule: (Host(`fzmacair`) || Host(`fzmacair.local`)) && PathPrefix(`/paperless`)
+      service: paperless-service
+      middlewares:
+        - common-redirect-to-https
+
+    paperless-local:
+      rule: (Host(`localhost`)) && PathPrefix(`/paperless`)
+      service: paperless-service
+
+  services:
+    paperless-service:
+      loadBalancer:
+        servers:
+          - url: "http://fzpaperless:8000/paperless"

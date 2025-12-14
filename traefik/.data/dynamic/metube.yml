@@ -1,0 +1,18 @@
+# metube.yml
+http:
+  routers:
+    metube-internal:
+      rule: (Host(`fzmacair`) ||Host(`fzmacair.local`)) && PathPrefix(`/metube`)
+      service: fzmetube@docker
+      middlewares:
+        - common-redirect-to-https
+    
+    metube-public:
+      rule: Host(`fzmacair.afzalex.com`) && PathPrefix(`/metube`)
+      service: fzmetube@docker
+      middlewares:
+        - oidc-auth
+
+    metube-local:
+      rule: Host(`localhost`) && PathPrefix(`/metube`)
+      service: fzmetube@docker

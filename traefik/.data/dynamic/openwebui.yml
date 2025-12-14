@@ -1,0 +1,19 @@
+# openwebui.yml
+# To support openwebui, you need to run the openwebui container with the following command:
+# fzdocker openwebui --persist
+# And you need to include certificates in the certs directory.
+http:
+  routers:
+    openwebui:
+      rule: "Host(`openwebui.fzryzen.local`)"
+      service: openwebui-service
+      middlewares:
+        # Uncomment this to enable HTTPS redirection
+        # - common-redirect-to-https
+
+  services:
+    openwebui-service:
+      loadBalancer:
+        servers:
+          - url: "http://fzopenwebui:8080"
+ 

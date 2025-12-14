@@ -1,0 +1,17 @@
+http:
+  routers:
+    immich-internal:
+      rule: Host(`immich.afzalex.local`)
+      service: immich-service
+      middlewares:
+        - common-redirect-to-https
+
+    immich-public:
+      rule: Host(`immich.afzalex.com`)
+      service: immich-service
+
+  services:
+    immich-service:
+      loadBalancer:
+        servers:
+          - url: "http://fzimmich:2283"
