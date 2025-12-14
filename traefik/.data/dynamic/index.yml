@@ -1,0 +1,20 @@
+# index.yml
+http:
+  routers:
+
+    index-internal:
+      rule: (Host(`fzmacair`) ||Host(`fzmacair.local`)) && PathRegexp(`^/(|config\.yaml|images(/.*)?|assets(/.*)?|favicon\.png)$`)
+      service: fzpublic@docker
+      priority: 1
+      middlewares:
+        - common-redirect-to-https
+    
+    index-public:
+      rule: Host(`fzmacair.afzalex.com`) && PathRegexp(`^/(|config\.yaml|images(/.*)?|assets(/.*)?|favicon\.png)$`)
+      service: fzpublic@docker
+      priority: 1
+
+    index-local:
+      rule: Host(`localhost`) && PathRegexp(`^/(|config\.yaml|images(/.*)?|assets(/.*)?|favicon\.png)$`)
+      service: fzpublic@docker
+      priority: 1
