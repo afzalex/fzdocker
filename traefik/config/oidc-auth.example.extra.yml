@@ -1,0 +1,26 @@
+http:
+  middlewares:
+    oidc-auth:
+      plugin:
+        traefikoidc:
+          providerURL: https://accounts.google.com
+          clientID: {{ env "OAUTH2_PROXY_CLIENT_ID" }}
+          clientSecret: {{ env "OAUTH2_PROXY_CLIENT_SECRET" }}
+          sessionEncryptionKey: 12345678901234567890123456789012
+          enablePKCE: true
+          callbackURL: /oauth2/callback
+          logoutURL: /oauth2/logout
+          sessionMaxAge: 300  # (in seconds)
+          corsAllowedOrigins: 
+            - fzmacair.local
+            - fzmacair
+            - fzmacair.afzalex.com
+          allowedUsers: 
+            - afzalex.store@gmail.com
+
+  routers:
+    oidc-callback:
+      rule: (Host(`localhost`) || Host(`fzmacair.local`) || Host(`fzmacair`) || Host(`fzmacair.afzalex.com`)) && (Path(`/oauth2/callback`) || Path(`/oauth2/logout`))
+      service: "noop@internal"
+      middlewares:
+        - oidc-auth
