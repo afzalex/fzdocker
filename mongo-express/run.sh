@@ -20,4 +20,4 @@ docker run --name ${CONTAINER_NAME} -it \
     --env-file ".env" \
     $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
     -p ${PORT_MAPPING}:8081 \
-    ${CONTAINER_NAME} 
+    ${IMAGE_NAME} 

@@ -38,7 +38,7 @@ exec docker run --name ${CONTAINER_NAME} -it \
     -v ./.data/database:/database \
     -v ./.data/.filebrowser.json:/.filebrowser.json \
     -e FB_BASEURL="/browser" \
-    ${CONTAINER_NAME} 
+    ${IMAGE_NAME} 
     
 
 

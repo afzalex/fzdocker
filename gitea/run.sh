@@ -22,5 +22,5 @@ docker run --name ${CONTAINER_NAME} -it \
     -v ./.data/gitea:/data \
     -v /etc/timezone:/etc/timezone:ro \
     -v /etc/localtime:/etc/localtime:ro \
-    ${CONTAINER_NAME}
+    ${IMAGE_NAME}
 

@@ -21,4 +21,4 @@ docker run --name ${CONTAINER_NAME} -it \
     $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
     -v ./.data/var/lib/mongodb:/data/db \
     -p ${PORT_MAPPING}:27017 \
-    ${CONTAINER_NAME} --auth 
+    ${IMAGE_NAME} --auth 

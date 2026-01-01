@@ -21,5 +21,5 @@ docker run --name ${CONTAINER_NAME} -it \
     --privileged \
     $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:8123"; fi) \
     -v ./.data/config:/config \
-    ${CONTAINER_NAME}
+    ${IMAGE_NAME}
 

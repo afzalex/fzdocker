@@ -27,7 +27,7 @@ docker run --name ${CONTAINER_NAME} -it \
     -p ${PORT_MAPPING}:80 \
     $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
     -v ./.data/config.yaml:/usr/share/caddy/config.yaml \
-    ${CONTAINER_NAME}
+    ${IMAGE_NAME}
     
 
 

@@ -20,5 +20,5 @@ docker run --name ${CONTAINER_NAME} -it \
     --add-host=host.docker.internal:host-gateway \
     $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:3033"; fi) \
     -v ./.data/downloads:/app/downloads \
-    ${CONTAINER_NAME}
+    ${IMAGE_NAME}
 

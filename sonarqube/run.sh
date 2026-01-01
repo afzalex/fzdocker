@@ -22,5 +22,5 @@ docker run --name ${CONTAINER_NAME} -it \
     -v ./.data/opt/sonarqube/data:/opt/sonarqube/data \
     -v ./.data/opt/sonarqube/extensions:/opt/sonarqube/extensions \
     -v ./.data/opt/sonarqube/logs:/opt/sonarqube/logs \
-    ${CONTAINER_NAME}
+    ${IMAGE_NAME}
 

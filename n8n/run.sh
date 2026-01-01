@@ -20,4 +20,4 @@ exec docker run --name ${CONTAINER_NAME} -it \
     --add-host=host.docker.internal:host-gateway \
     $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:5678"; fi) \
     -v ./.data:/home/node/.n8n \
-    ${CONTAINER_NAME} 
+    ${IMAGE_NAME} 

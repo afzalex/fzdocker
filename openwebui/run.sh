@@ -29,7 +29,7 @@ docker run --name ${CONTAINER_NAME} -it \
     --add-host=host.docker.internal:host-gateway \
     $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:8080"; fi) ${DOCKER_GPU_FLAGS} \
     -v ./.data/open-webui:/app/backend/data \
-    ${CONTAINER_NAME} 
+    ${IMAGE_NAME} 
     
 
 

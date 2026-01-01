@@ -52,7 +52,7 @@ docker run --name ${CONTAINER_NAME} -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v ./.data/traefik.yml:/etc/traefik/traefik.yml \
     -v "${TRAEFIK_DYNAMIC_CONFIGS_DIR}":/etc/traefik/dynamic \
-    ${CONTAINER_NAME} \
+    ${IMAGE_NAME} \
     --api.basePath=/dashboard
     
 

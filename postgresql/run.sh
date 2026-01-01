@@ -20,5 +20,5 @@ docker run --name ${CONTAINER_NAME} -it \
     --add-host=host.docker.internal:host-gateway \
     $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:5432"; fi) \
     -v ./.data/var/lib/postgresql/data:/var/lib/postgresql/data \
-    ${CONTAINER_NAME}
+    ${IMAGE_NAME}
 
