@@ -1,0 +1,19 @@
+http:
+  routers:
+    dex-public:
+      rule: Host(`fzmacair.afzalex.com`) && PathPrefix(`/dex`)
+      service: dex-service
+
+    dex-internal:
+      rule: (Host(`fzmacair`) || Host(`fzmacair.local`)) && PathPrefix(`/dex`)
+      service: dex-service
+
+    dex-local:
+      rule: (Host(`localhost`)) && PathPrefix(`/dex`)
+      service: dex-service
+
+  services:
+    dex-service:
+      loadBalancer:
+        servers:
+          - url: "http://fzdex:5556/dex"
