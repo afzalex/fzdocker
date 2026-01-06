@@ -1,0 +1,15 @@
+providers:
+  - id: dex
+    provider: oidc
+    clientID: oauth2-proxy
+    clientSecret: ${OAUTH2_PROXY_CLIENT_SECRET}
+    oidcConfig:
+      issuerURL: "https://auth.yourdomain.example/dex"
+    # This is the key part:
+    loginURLParameters:
+      - name: connector_id
+        allow:
+          - value: google
+          - value: local
+server:
+  bindAddress: "0.0.0.0:4180"

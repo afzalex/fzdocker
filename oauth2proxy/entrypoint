@@ -1,7 +1,0 @@
-#!/bin/sh
-
-
-socat TCP-LISTEN:8080,fork TCP:fzkeycloak:8080 &
-
-
-/bin/oauth2-proxy
