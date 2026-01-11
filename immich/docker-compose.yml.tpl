@@ -7,7 +7,7 @@
 #
 # The compose file on main may not be compatible with the latest release.
 
-name: fzimmich
+name: ${CONTAINER_NAME}
 
 services:
   immich-server:
@@ -28,6 +28,7 @@ services:
     environment:
       DB_HOSTNAME: database
       IMMICH_MACHINE_LEARNING_URL: http://immich-machine-learning:3003
+      REDIS_HOSTNAME: ${REDIS_CONTAINER_NAME}
     ports:
       - "${PORT_MAPPING:-2283}:2283"
     depends_on:
@@ -37,6 +38,7 @@ services:
       disable: false
 
   immich-machine-learning:
+    container_name: ${CONTAINER_NAME}-machine-learning
     # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
     # Example tag: ${IMMICH_VERSION:-release}-cuda
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
@@ -55,6 +57,7 @@ services:
       disable: false
 
   database:
+    container_name: ${CONTAINER_NAME}-database
     image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
     restart: unless-stopped
     networks:
@@ -67,7 +70,7 @@ services:
       # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
       # DB_STORAGE_TYPE: 'HDD'
     volumes:
-      - ./.data/postgres-data:/var/lib/postgresql/data
+      - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
     shm_size: 128mb
 
 networks:

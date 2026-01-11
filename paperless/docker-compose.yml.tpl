@@ -29,7 +29,7 @@
 # For more extensive installation and update instructions, refer to the
 # documentation.
 
-name: fzpaperless
+name: ${CONTAINER_NAME}
 
 services:
   webserver:
@@ -60,6 +60,7 @@ services:
       PAPERLESS_OCR_USER_ARGS: '{"continue_on_soft_render_error": true}'
 
   gotenberg:
+    container_name: ${CONTAINER_NAME}-gotenberg
     image: docker.io/gotenberg/gotenberg:8.25
     restart: unless-stopped
     networks:
@@ -71,6 +72,7 @@ services:
       - "--chromium-disable-javascript=true"
       - "--chromium-allow-list=file:///tmp/.*"
   tika:
+    container_name: ${CONTAINER_NAME}-tika
     image: docker.io/apache/tika:latest
     restart: unless-stopped
     networks:

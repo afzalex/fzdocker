@@ -1,10 +1,10 @@
 #!/bin/bash
-# Runner for Redis
+# Runner for Portainer
 
 source ../run-preprocess.tpl.sh
 
 # Create .data directory if it doesn't exist
-mkdir -p ./.data/data
+mkdir -p ./.data
 
 # Remove existing container if running
 if [[ " $@ " =~ " --force " ]]; then
@@ -18,7 +18,8 @@ docker run --name ${CONTAINER_NAME} -it \
     --env-file ".env" \
     $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
     --add-host=host.docker.internal:host-gateway \
-    $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:6379"; fi) \
-    -v ./.data/data:/data \
-    redis:7-alpine
+    $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:9000"; fi) \
+    -v ./.data:/data \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    portainer/portainer-ce --base-url "/portainer"
 

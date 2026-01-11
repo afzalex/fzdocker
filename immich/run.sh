@@ -10,12 +10,7 @@ mkdir -p ${UPLOAD_LOCATION}
 
 # Process docker-compose.yml.tpl to substitute environment variables
 # This ensures variables like ${NETWORK_NAME} are properly substituted
-if [ -f ./docker-compose.yml.tpl ]; then
-    # Source env files to make variables available for envsubst
-    set -a
-    [ -f public.env ] && source public.env
-    [ -f .env ] && source .env
-    set +a
+if [ ! -f ./docker-compose.yml ]; then
     # Create processed compose file in same directory
     envsubst < ./docker-compose.yml.tpl > ./docker-compose.yml
 fi
@@ -26,7 +21,7 @@ if [[ " $@ " =~ " --force " ]]; then
     # Remove by container name first (in case of leftover containers from old setup)
     docker rm -f ${CONTAINER_NAME} 2>/dev/null || true
     # Then use docker compose down
-    docker compose down -v 2>/dev/null || true
+    docker compose down
 fi
 
 # Run docker compose
