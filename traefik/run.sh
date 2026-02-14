@@ -55,5 +55,9 @@ docker run --name ${CONTAINER_NAME} -it \
     -v ./local/traefik.yml:/etc/traefik/traefik.yml \
     -v "${TRAEFIK_DYNAMIC_CONFIGS_DIR}":/etc/traefik/dynamic \
     ${DOCKER_IMAGE} \
-    --api.basePath=/dashboard
+    --api.basePath=/dashboard \
+    --providers.docker=true \
+    --providers.docker.exposedbydefault=false \
+    --experimental.plugins.traefikoidc.modulename=github.com/lukaszraczylo/traefikoidc \
+    --experimental.plugins.traefikoidc.version=v0.7.10
 

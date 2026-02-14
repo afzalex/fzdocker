@@ -21,5 +21,7 @@ docker run --name ${CONTAINER_NAME} -it \
     $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:9000"; fi) \
     -v ./.data:/data \
     -v /var/run/docker.sock:/var/run/docker.sock \
+    -l traefik.enable=true \
+    -l traefik.http.services.fzportainer.loadbalancer.server.port=9000 \
     portainer/portainer-ce --base-url "/portainer"
 
