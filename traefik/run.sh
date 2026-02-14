@@ -1,6 +1,8 @@
 #!/bin/bash
 # Runner for traefik
 
+export DOCKER_IMAGE=traefik:v3.6.8
+
 source ../run-preprocess.tpl.sh
 
 # Create .data directory if it doesn't exist
@@ -52,9 +54,6 @@ docker run --name ${CONTAINER_NAME} -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v ./.data/traefik.yml:/etc/traefik/traefik.yml \
     -v "${TRAEFIK_DYNAMIC_CONFIGS_DIR}":/etc/traefik/dynamic \
-    ${IMAGE_NAME} \
+    ${DOCKER_IMAGE} \
     --api.basePath=/dashboard
-    
-
-
 

@@ -18,7 +18,6 @@ fi
 
 # Remove existing containers if --force flag is used
 if [[ " $@ " =~ " --force " ]]; then
-    docker rm -f ${CONTAINER_NAME} 2>/dev/null || true
     echo "Removing existing paperless-ngx containers..."
     docker compose down
 fi

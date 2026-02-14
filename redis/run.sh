@@ -1,5 +1,6 @@
 #!/bin/bash
 # Runner for Redis
+DOCKER_IMAGE=redis:7-alpine
 
 source ../run-preprocess.tpl.sh
 
@@ -20,5 +21,5 @@ docker run --name ${CONTAINER_NAME} -it \
     --add-host=host.docker.internal:host-gateway \
     $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:6379"; fi) \
     -v ./.data/data:/data \
-    redis:7-alpine
+    ${DOCKER_IMAGE}
 
