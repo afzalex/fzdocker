@@ -3,12 +3,6 @@
 
 source ../run-preprocess.tpl.sh
 
-# Create .data directories if they don't exist
-mkdir -p ./.data/data
-mkdir -p ./.data/media
-mkdir -p ./export
-mkdir -p ./consume
-
 # Process docker-compose.yml.tpl to substitute environment variables
 # This ensures variables like ${NETWORK_NAME} are properly substituted
 if [ -f ./docker-compose.yml.tpl ]; then

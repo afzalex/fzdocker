@@ -44,10 +44,10 @@ services:
     ports:
       - "${PORT_MAPPING:-8000}:8000"
     volumes:
-      - ./.data/data:/usr/src/paperless/data
-      - ./.data/media:/usr/src/paperless/media
-      - ./export:/usr/src/paperless/export
-      - ./consume:/usr/src/paperless/consume
+      - ./local/data:/usr/src/paperless/data
+      - ./local/media:/usr/src/paperless/media
+      - ./.data/export:/usr/src/paperless/export
+      - ./.data/consume:/usr/src/paperless/consume
     env_file:
       - public.env
       - .env

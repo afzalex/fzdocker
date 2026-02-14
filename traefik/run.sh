@@ -57,7 +57,5 @@ docker run --name ${CONTAINER_NAME} -it \
     ${DOCKER_IMAGE} \
     --api.basePath=/dashboard \
     --providers.docker=true \
-    --providers.docker.exposedbydefault=false \
-    --experimental.plugins.traefikoidc.modulename=github.com/lukaszraczylo/traefikoidc \
-    --experimental.plugins.traefikoidc.version=v0.7.10
+    --providers.docker.exposedbydefault=false
 

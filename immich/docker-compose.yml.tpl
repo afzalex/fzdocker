@@ -49,7 +49,7 @@ services:
     #   file: hwaccel.ml.yml
     #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
     volumes:
-      - ./.data/model-cache:/cache
+      - ./local/cache:/cache
     env_file:
       - public.env
       - .env
