@@ -5,14 +5,14 @@ export DOCKER_IMAGE=caddy:latest
 
 source ../run-preprocess.tpl.sh
 
-# Create .data directory if it doesn't exist
-mkdir -p ./.data
+# Create local directory if it doesn't exist
+mkdir -p ./local
 
-# Copy index.html to .data/html if it doesn't exist
-if [ ! -f ./.data/config.yaml ] && [ -f ./config.yaml ]; then
-    echo "Copying config.yaml to .data..."
-    mkdir -p ./.data
-    cp ./config.yaml ./.data/config.yaml
+# Copy index.html to local/html if it doesn't exist
+if [ ! -f ./local/config.yaml ] && [ -f ./config.yaml ]; then
+    echo "Copying config.yaml to local..."
+    mkdir -p ./local
+    cp ./config.yaml ./local/config.yaml
 fi
 
 
@@ -28,7 +28,7 @@ docker run --name ${CONTAINER_NAME} -it \
     --env-file ".env" \
     -p ${PORT_MAPPING}:80 \
     $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
-    -v ./.data/config.yaml:/usr/share/caddy/config.yaml \
+    -v ./local/config.yaml:/usr/share/caddy/config.yaml \
     ${IMAGE_NAME}
     
 
