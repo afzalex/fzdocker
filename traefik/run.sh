@@ -5,14 +5,14 @@ export DOCKER_IMAGE=traefik:v3.6.8
 
 source ../run-preprocess.tpl.sh
 
-# Create .data directory if it doesn't exist
-mkdir -p ./.data
+# Create local directory if it doesn't exist
+mkdir -p ./local
 
 echo "HOST_NAME: ${HOST_NAME}"
     
 # Check if HOST_WORKDIR contains any non-yml files
 if ls "${HOST_WORKDIR}"/* >/dev/null 2>&1 && find "${HOST_WORKDIR}" -type f ! -name "*.yml" -print -quit | grep -q .; then
-    TRAEFIK_DYNAMIC_CONFIGS_DIR="./.data/dynamic"
+    TRAEFIK_DYNAMIC_CONFIGS_DIR="./local/dynamic"
     # Create dynamic directory if it doesn't exist
     mkdir -p "${TRAEFIK_DYNAMIC_CONFIGS_DIR}"
     # Add common.yml and other example config files if config directory is empty
@@ -28,13 +28,13 @@ fi
 
 echo "TRAEFIK_DYNAMIC_CONFIGS_DIR: ${TRAEFIK_DYNAMIC_CONFIGS_DIR}"
 
-# Copy traefik.yml to .data directory if it doesn't exist
-if [ ! -f "./.data/traefik.yml" ]; then
-    cp config/traefik.yml ./.data/traefik.yml
+# Copy traefik.yml to local directory if it doesn't exist
+if [ ! -f "./local/traefik.yml" ]; then
+    cp config/traefik.yml ./local/traefik.yml
 fi
 
 # Create certs directory if it doesn't exist
-mkdir -p ./.data/certs
+mkdir -p ./local/certs
 
 # Remove existing container if running
 if [[ " $@ " =~ " --force " ]]; then
@@ -50,9 +50,9 @@ docker run --name ${CONTAINER_NAME} -it \
     -p ${PORT_MAPPING_SECURE}:443 \
     $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
     --add-host=host.docker.internal:host-gateway \
-    -v ./.data/certs:/etc/traefik/certs \
+    -v ./local/certs:/etc/traefik/certs \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v ./.data/traefik.yml:/etc/traefik/traefik.yml \
+    -v ./local/traefik.yml:/etc/traefik/traefik.yml \
     -v "${TRAEFIK_DYNAMIC_CONFIGS_DIR}":/etc/traefik/dynamic \
     ${DOCKER_IMAGE} \
     --api.basePath=/dashboard

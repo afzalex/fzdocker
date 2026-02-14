@@ -1,6 +1,8 @@
 #!/bin/bash
 # Runner for public
 
+export DOCKER_IMAGE=caddy:latest
+
 source ../run-preprocess.tpl.sh
 
 # Create .data directory if it doesn't exist
