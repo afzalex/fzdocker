@@ -23,9 +23,14 @@ if [ -f '.env' ]; then
     source "${environmentSetupFile}"
     rm -f "${environmentSetupFile}"
 fi
-echo ">> Stopping ${CONTAINER_NAME} container..."
 
-# Stop and remove the container if it exists
-docker rm -f "${CONTAINER_NAME}"
+echo ">> Stopping ${CONTAINER_NAME} container..."
+if [ -f 'docker-compose.yml' ]; then
+    echo ">> Stopping ${CONTAINER_NAME} container using docker compose..."
+    docker compose down
+else
+    echo ">> Stopping ${CONTAINER_NAME} container using docker rm..."
+    docker rm -f "${CONTAINER_NAME}" 2>/dev/null || true
+fi
 
 echo ">> ${CONTAINER_NAME} container stopped" 

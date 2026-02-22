@@ -9,12 +9,12 @@ if [ $# -lt 2 ]; then
     echo ">> Example: fzdocker jupyter run"
 
     found=()
-    for line in *; do
+    for line in "$SCRIPT_DIR"/*; do
         if [ -f "$line/run.sh" ]; then
-            found+=("$line")
+            found+=("$(basename "$line")")
         fi
     done
-    printf "%s\n" "${found[@]}" | column
+    printf "%s\n" "${found[@]}" | sort | column -c 120
     exit 1
 fi
 
