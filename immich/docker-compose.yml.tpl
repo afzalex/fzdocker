@@ -14,8 +14,7 @@ services:
     container_name: ${CONTAINER_NAME}
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     restart: unless-stopped
-    networks:
-      - ${NETWORK_NAME}
+    networks: [${NETWORK_NAME}]
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -28,6 +27,7 @@ services:
     environment:
       DB_HOSTNAME: database
       IMMICH_MACHINE_LEARNING_URL: http://immich-machine-learning:3003
+      # IMMICH_MACHINE_LEARNING_URL: http://immich-ml-gateway:3003
       REDIS_HOSTNAME: ${REDIS_CONTAINER_NAME}
     ports:
       - "${PORT_MAPPING:-2283}:2283"
@@ -43,8 +43,7 @@ services:
     # Example tag: ${IMMICH_VERSION:-release}-cuda
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
     restart: unless-stopped
-    networks:
-      - ${NETWORK_NAME}
+    networks: [${NETWORK_NAME}]
     # extends: # uncomment this section for hardware acceleration - see https://docs.immich.app/features/ml-hardware-acceleration
     #   file: hwaccel.ml.yml
     #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
@@ -60,8 +59,7 @@ services:
     container_name: ${CONTAINER_NAME}-database
     image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
     restart: unless-stopped
-    networks:
-      - ${NETWORK_NAME}
+    networks: [${NETWORK_NAME}]
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
@@ -72,6 +70,14 @@ services:
     volumes:
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
     shm_size: 128mb
+
+  # immich-ml-gateway:
+  #   image: haproxy:2.9
+  #   container_name: immich-ml-gateway
+  #   networks: [${NETWORK_NAME}]
+  #   volumes:
+  #     - ./.data/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+  #   restart: unless-stopped
 
 networks:
   ${NETWORK_NAME}:
