@@ -28,6 +28,7 @@ fi
 
 # Use exec to ensure signals are properly passed to docker
 exec docker run --name ${CONTAINER_NAME} -it \
+    --user "$(id -u):$(id -g)" \
     --network "${NETWORK_NAME}" \
     --env-file "public.env" \
     --env-file ".env" \
