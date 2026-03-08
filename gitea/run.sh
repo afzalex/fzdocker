@@ -1,10 +1,9 @@
 #!/bin/bash
-# Runner for PostgreSQL
+# Runner for Gitea
 
 source ../run-preprocess.tpl.sh
 
-# Create .data directory if it doesn't exist
-# mkdir -p ./.data/var/lib/postgresql/data
+mkdir -p ./local/gitea
 
 # Remove existing container if running
 if [[ " $@ " =~ " --force " ]]; then
@@ -19,8 +18,9 @@ docker run --name ${CONTAINER_NAME} -it \
     $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
     --add-host=host.docker.internal:host-gateway \
     $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:3000"; fi) \
-    -v ./.data/gitea:/data \
+    $(if [ ! -z "${SSH_PORT_MAPPING}" ]; then echo "-p ${SSH_PORT_MAPPING}:22"; fi) \
+    -v ./local/gitea:/data \
     -v /etc/timezone:/etc/timezone:ro \
     -v /etc/localtime:/etc/localtime:ro \
-    ${IMAGE_NAME}
+    docker.gitea.com/gitea:1.24.2
 
