@@ -1,26 +1,27 @@
 #!/bin/bash
-# Runner for Gitea
+# Runner for Gitea (docker-compose)
 
 source ../run-preprocess.tpl.sh
 
+# Create local data directories if they don't exist
 mkdir -p ./local/gitea
+mkdir -p ./local/runner
 
-# Remove existing container if running
-if [[ " $@ " =~ " --force " ]]; then
-    echo "Removing existing ${CONTAINER_NAME} container..."
-    docker rm -f ${CONTAINER_NAME} 2>/dev/null || true
+# Process docker-compose.yml.tpl to substitute environment variables
+if [ ! -f ./docker-compose.yml ]; then
+    envsubst < ./docker-compose.yml.tpl > ./docker-compose.yml
 fi
 
-docker run --name ${CONTAINER_NAME} -it \
-    --network "${NETWORK_NAME}" \
-    --env-file "public.env" \
-    --env-file ".env" \
-    $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
-    --add-host=host.docker.internal:host-gateway \
-    $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:3000"; fi) \
-    $(if [ ! -z "${SSH_PORT_MAPPING}" ]; then echo "-p ${SSH_PORT_MAPPING}:22"; fi) \
-    -v ./local/gitea:/data \
-    -v /etc/timezone:/etc/timezone:ro \
-    -v /etc/localtime:/etc/localtime:ro \
-    docker.gitea.com/gitea:1.24.2
+# Remove existing containers if --force flag is used
+if [[ " $@ " =~ " --force " ]]; then
+    echo "Removing existing gitea containers..."
+    docker compose down
+fi
+
+# Run docker compose
+if [[ " $@ " =~ " --persist " ]]; then
+    docker compose up -d
+else
+    docker compose up
+fi
 
