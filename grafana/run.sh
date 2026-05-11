@@ -3,14 +3,20 @@
 
 source ../run-preprocess.tpl.sh
 
-# Create .data directories if they don't exist
-mkdir -p ./.data/grafana
-if [ ! -f ./.data/prometheus.yml ]; then
-    echo "Processing prometheus.yml.tpl..."
-    mkdir -p ./.data/prometheus
-    envsubst < ./prometheus.yml.tpl > ./.data/prometheus.yml
-fi
 
+# Create local directory if it doesn't exist
+mkdir -p ./local/prometheus
+mkdir -p ./local/grafana
+
+# Copy prometheus.yml.tpl to local directory if it doesn't exist
+if [ ! -f ./local/prometheus.yml ]; then
+    echo "Copying prometheus.yml.tpl to local..."
+    envsubst < ./config/prometheus.yml.tpl > ./local/prometheus.yml
+fi
+if [ ! -f ./local/blackbox/blackbox.yml ]; then
+    echo "Copying blackbox.yml.tpl to local..."
+    envsubst < ./config/blackbox.yml.tpl > ./local/blackbox.yml
+fi
 
 # Process docker-compose.yml.tpl to substitute environment variables
 # This ensures variables like ${NETWORK_NAME} are properly substituted

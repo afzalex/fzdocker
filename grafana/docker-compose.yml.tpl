@@ -13,9 +13,9 @@ services:
       # optional: cap size too (uncomment if you want)
       # - --storage.tsdb.retention.size=5GB
     volumes:
-      - .data/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./local/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       # - ${CONTAINER_NAME}-prometheus-data:/prometheus
-      - ./.data/prometheus:/prometheus
+      - ./local/prometheus:/prometheus
     # expose to host only if you want to open Prometheus UI directly
     # ports:
     #   - "9090:9090"
@@ -42,6 +42,7 @@ services:
       resources:
         limits:
           memory: 128M
+  
   cadvisor:
     image: ghcr.io/google/cadvisor:0.56.2
     networks: [${NETWORK_NAME}]
@@ -59,6 +60,18 @@ services:
       - /dev/disk:/dev/disk:ro
     # ports:
     #   - 8080
+    restart: unless-stopped
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:latest
+    networks: [${NETWORK_NAME}]
+    container_name: ${CONTAINER_NAME}-blackbox
+    # ports:
+    #   - "9115:9115"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./local/blackbox.yml:/etc/blackbox_exporter/config.yml
     restart: unless-stopped
 
   grafana:
