@@ -5,7 +5,7 @@
 http:
   routers:
     openwebui:
-      rule: "Host(`openwebui.fzryzen.local`)"
+      rule: "Host(`openwebui.fzryzen.com`)"
       service: openwebui-service
       middlewares:
         # Uncomment this to enable HTTPS redirection
