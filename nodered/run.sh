@@ -1,10 +1,9 @@
 #!/bin/bash
-# Runner for Home Assistant
+# Runner for Node-RED
 
 source ../run-preprocess.tpl.sh
 
-# Create local/config directory if it doesn't exist
-mkdir -p ./local/config
+mkdir -p "${DATA_DIR}"
 
 # Remove existing container if running
 if [[ " $@ " =~ " --force " ]]; then
@@ -18,8 +17,6 @@ docker run --name ${CONTAINER_NAME} -it \
     --env-file ".env" \
     $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
     --add-host=host.docker.internal:host-gateway \
-    --privileged \
-    $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:8123"; fi) \
-    -v ./local/config:/config \
-    "ghcr.io/home-assistant/home-assistant:stable"
-
+    $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:1880"; fi) \
+    -v "${DATA_DIR}:/data" \
+    "${IMAGE_NAME}"
