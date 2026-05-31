@@ -3,6 +3,17 @@
 
 source ../run-preprocess.tpl.sh
 
+INIT_FLAG="./local/.initialized"
+
+if [ ! -f "${INIT_FLAG}" ]; then
+    echo ">> Not initialized, running init.sh..."
+    ./init.sh
+    if [ ! -f "${INIT_FLAG}" ]; then
+        echo ">> Initialization incomplete. Aborting."
+        exit 1
+    fi
+fi
+
 # Remove existing container if running
 if [[ " $@ " =~ " --force " ]]; then
     echo "Removing existing ${CONTAINER_NAME} container..."
