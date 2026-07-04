@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fzdocker — Public Site</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        main {
+            max-width: 36rem;
+        }
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        code {
+            background: #16213e;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .hint {
+            margin-top: 1.5rem;
+            padding: 1rem 1.25rem;
+            background: #16213e;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+        .hint strong { color: #7eb8da; }
+        ul {
+            margin: 0.75rem 0 0 1.25rem;
+            color: #aaa;
+            line-height: 1.7;
+        }
+        li { margin-bottom: 0.35rem; }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Public site placeholder</h1>
+        <p>This is the default page served by the <code>public</code> service. Replace it with your own static site files.</p>
+        <div class="hint">
+            <p><strong>How to set up your static site</strong></p>
+            <ul>
+                <li>Place your site files in <code>public/local/sites/main/</code></li>
+                <li>Include an <code>index.html</code> at the root of that directory</li>
+                <li>Static assets (CSS, JS, images) go alongside it in the same folder tree</li>
+                <li>Restart the service after changes: <code>fzdocker public run --force --persist</code></li>
+            </ul>
+            <p style="margin-top: 1rem;">The site is served at the root URL. Additional sites can be added under <code>public/local/sites/</code> and configured in <code>public/nginx.conf.tpl</code>.</p>
+        </div>
+    </main>
+</body>
+</html>
