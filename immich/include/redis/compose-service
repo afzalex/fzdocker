@@ -1,0 +1,7 @@
+  redis:
+    container_name: ${REDIS_CONTAINER_NAME}
+    image: docker.io/valkey/valkey:8-alpine@sha256:8890cf25bfba887968ff218bf75ebefad328e9323793e7f67aae10a4db2a7cf8
+    restart: unless-stopped
+    networks: [${NETWORK_NAME}]
+    healthcheck:
+      test: valkey-cli ping || exit 1

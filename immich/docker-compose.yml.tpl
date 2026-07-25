@@ -25,15 +25,16 @@ services:
       - public.env
       - .env
     environment:
-      DB_HOSTNAME: database
+      DB_HOSTNAME: ${DB_HOSTNAME}
       IMMICH_MACHINE_LEARNING_URL: http://immich-machine-learning:3003
       # IMMICH_MACHINE_LEARNING_URL: http://immich-ml-gateway:3003
-      REDIS_HOSTNAME: ${REDIS_CONTAINER_NAME}
+      REDIS_HOSTNAME: ${REDIS_HOSTNAME}
     ports:
       - "${PORT_MAPPING:-2283}:2283"
     depends_on:
-      - database
       - immich-machine-learning
+${DATABASE_DEPENDS_ON}
+${REDIS_DEPENDS_ON}
     healthcheck:
       disable: false
 
@@ -55,21 +56,9 @@ services:
     healthcheck:
       disable: false
 
-  database:
-    container_name: ${CONTAINER_NAME}-database
-    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
-    restart: unless-stopped
-    networks: [${NETWORK_NAME}]
-    environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_DB: ${DB_DATABASE_NAME}
-      POSTGRES_INITDB_ARGS: '--data-checksums'
-      # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
-      # DB_STORAGE_TYPE: 'HDD'
-    volumes:
-      - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
-    shm_size: 128mb
+${DATABASE_COMPOSE_SECTION}
+
+${REDIS_COMPOSE_SECTION}
 
   # immich-ml-gateway:
   #   image: haproxy:2.9

@@ -1,0 +1,1 @@
+FROM tensorchord/vchord-scratch:pg17-v1.1.1 AS vchord_scratch

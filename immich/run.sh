@@ -3,24 +3,30 @@
 
 source ../run-preprocess.tpl.sh
 
-# Create local directories if they don't exist
-mkdir -p ./local/model-cache
-mkdir -p ./local/postgres-data
-mkdir -p ${UPLOAD_LOCATION}
+INIT_FLAG="./local/.initialized"
 
-# Process docker-compose.yml.tpl to substitute environment variables
-# This ensures variables like ${NETWORK_NAME} are properly substituted
-if [ ! -f ./docker-compose.yml ]; then
-    # Create processed compose file in same directory
-    envsubst < ./docker-compose.yml.tpl > ./docker-compose.yml
+if [[ " $@ " =~ " --clean " ]]; then
+    echo ">> Cleaning init state..."
+    rm -f "${INIT_FLAG}"
+    rm -f ./docker-compose.yml
+    rm -rf ./local/postgres-data
+    rm -rf ./local/cache
+fi
+
+if [ ! -f "${INIT_FLAG}" ]; then
+    echo ">> Not initialized, running init.sh..."
+    source ./init.sh
+    if [ ! -f "${INIT_FLAG}" ]; then
+        echo ">> Initialization incomplete. Aborting."
+        exit 1
+    fi
+    sleep 1
 fi
 
 # Remove existing containers if --force flag is used
 if [[ " $@ " =~ " --force " ]]; then
     echo "Removing existing immich containers..."
-    # Remove by container name first (in case of leftover containers from old setup)
     docker rm -f ${CONTAINER_NAME} 2>/dev/null || true
-    # Then use docker compose down
     docker compose down
 fi
 

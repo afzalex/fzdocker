@@ -1,4 +1,1 @@
 docker-compose.yml
-library/
-postgres-data/
-model-cache/
