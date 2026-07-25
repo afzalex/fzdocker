@@ -1,24 +1,23 @@
-### Requirement 
-Need to setup mysql client to connect to required mysql server without authentication.
+# Apache Guacamole
 
+Remote desktop gateway (RDP, VNC, SSH, etc.) using the official Guacamole Docker images.
 
-/opt/guacamole/bin/initdb.sh
+## Usage
 
-docker exec -it g_guacamole /opt/guacamole/bin/initdb.sh --mysql
+```bash
+cd guacamole
+./run.sh              # foreground
+./run.sh --persist    # detached with restart policy
+./run.sh --force      # recreate containers
+```
 
+First run generates the PostgreSQL schema at `local/init/initdb.sql` and marks `local/.initialized`. PostgreSQL applies that script only on a fresh data directory (`local/postgres-data`).
 
-MYSQL_PORT=8893
-MYSQL_PORT=3306
+Open `http://localhost:8080/guacamole/` (or your `PORT_MAPPING`). Default login after a new database: **guacadmin** / **guacadmin** — change this immediately in Settings.
 
-mysql -P "${MYSQL_PORT}" -e "create database guacamole"
+## Re-initialize
 
-docker exec -it g_guacamole /opt/guacamole/bin/initdb.sh --mysql | mysql -P "${MYSQL_PORT}" -D guacamole --password=${MY_MYSQL_PASSWORD}
-
-docker exec g_db mysql -D guacamole --password=${MY_MYSQL_PASSWORD}
-
-
-if [[ -z $(mysql -P "${MYSQL_PORT}" -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='sys'") ]]; then 
-    mysql -P "${MYSQL_PORT}" -e "create database guacamole"
-fi
-
-docker exec -it g_guacamole /opt/guacamole/bin/initdb.sh --mysql | mysql -P "${MYSQL_PORT}" -D guacamole
+```bash
+rm -rf local/postgres-data local/init local/.initialized
+./run.sh
+```

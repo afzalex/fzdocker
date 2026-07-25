@@ -3,8 +3,8 @@
 
 source ../run-preprocess.tpl.sh
 
-# Create .data directory if it doesn't exist
-mkdir -p ./.data/var/lib/postgresql/data
+# Create local directory if it doesn't exist
+mkdir -p ./local/var/lib/postgresql/data
 
 # Remove existing container if running
 if [[ " $@ " =~ " --force " ]]; then
@@ -19,6 +19,6 @@ docker run --name ${CONTAINER_NAME} -it \
     $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
     --add-host=host.docker.internal:host-gateway \
     $(if [ ! -z "${PORT_MAPPING}" ]; then echo "-p ${PORT_MAPPING}:5432"; fi) \
-    -v ./.data/var/lib/postgresql/data:/var/lib/postgresql/data \
+    -v ./local/var/lib/postgresql/data:/var/lib/postgresql/data \
     ${IMAGE_NAME}
 
