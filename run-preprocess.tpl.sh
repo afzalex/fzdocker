@@ -13,7 +13,7 @@ touch .env
 
 publicEnvironmentSetupFile=$(mktemp)
 if [ -f 'public.env' ]; then
-    cat 'public.env' | while read line; do
+    cat 'public.env' | while IFS= read -r line || [ -n "$line" ]; do
       if [ "${#line}" -gt 0 ] && [[ ! $line =~ ^# ]]; then
         echo "export $line";
       fi
@@ -26,7 +26,7 @@ fi
 
 environmentSetupFile=$(mktemp)
 if [ -f '.env' ]; then
-    cat '.env' | while read line; do
+    cat '.env' | while IFS= read -r line || [ -n "$line" ]; do
         if [ "${#line}" -gt 0 ] && [[ ! $line =~ ^# ]]; then
           echo "export $line";
         fi
@@ -35,10 +35,10 @@ if [ -f '.env' ]; then
     rm -f "${environmentSetupFile}"
 fi
 
-if [ -f 'Dockerfile' ]; then
-    docker image rm -f "${IMAGE_NAME}" || true
-    docker build -t "${IMAGE_NAME}" .
-fi
+# if [ -f 'Dockerfile' ]; then
+#     docker image rm -f "${IMAGE_NAME}" || true
+#     docker build -t "${IMAGE_NAME}" .
+# fi
 
 # Check if the network exists, if not, create it
 if ! docker network inspect "$NETWORK_NAME" >/dev/null 2>&1; then
