@@ -3,9 +3,9 @@
 
 source ../run-preprocess.tpl.sh
 
-# Create .data directories if they don't exist
-mkdir -p ./.data/model-cache
-mkdir -p ./.data/postgres-data
+# Create local directories if they don't exist
+mkdir -p ./local/model-cache
+mkdir -p ./local/postgres-data
 mkdir -p ${UPLOAD_LOCATION}
 
 # Process docker-compose.yml.tpl to substitute environment variables

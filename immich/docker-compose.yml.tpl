@@ -76,7 +76,7 @@ services:
   #   container_name: immich-ml-gateway
   #   networks: [${NETWORK_NAME}]
   #   volumes:
-  #     - ./.data/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+  #     - ./local/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
   #   restart: unless-stopped
 
 networks:
