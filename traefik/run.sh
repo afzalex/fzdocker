@@ -57,5 +57,7 @@ docker run --name ${CONTAINER_NAME} -it \
     ${DOCKER_IMAGE} \
     --api.basePath=/dashboard \
     --providers.docker=true \
-    --providers.docker.exposedbydefault=false
+    --providers.docker.exposedbydefault=false \
+    --accesslog=true \
+    --accesslog.format=json
 

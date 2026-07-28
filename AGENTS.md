@@ -126,6 +126,29 @@ This is the model structure for compose-driven services with modular container s
 
 This is the model structure for services with a dynamically generated Dockerfile and optional feature modules.
 
+## Reference example: `traefik`
+
+`traefik` is the reference structure for edge reverse proxy / load balancer services with dynamic file & Docker provider routing:
+
+- `config/`
+  - Contains default static configuration (`traefik.yml`) and default dynamic routing templates (e.g. `commons.yml`, `*.example.yml` for services like `openwebui`, `silverbullet`, `filebrowser`).
+
+- `public.env`
+  - Defines network name (`NETWORK_NAME`), container name (`CONTAINER_NAME`), host name (`HOST_NAME`), and ingress port mappings (`PORT_MAPPING=80`, `PORT_MAPPING_SECURE=443`, `PORT_MAPPING_DASHBOARD=8080`).
+
+- `run.sh`
+  - Sources `../run-preprocess.tpl.sh`.
+  - Dynamically initializes `./local/dynamic` and populates default example route configs from `config/` on initial setup.
+  - Copies default `traefik.yml` to `./local/traefik.yml` if missing.
+  - Mounts `/var/run/docker.sock` for Docker container auto-discovery (`--providers.docker=true`, `--providers.docker.exposedbydefault=false`).
+  - Mounts static config (`./local/traefik.yml`), dynamic configs (`./local/dynamic`), and SSL certificates (`./local/certs`).
+  - Attaches to the shared Docker network (`${NETWORK_NAME}`).
+
+- `edit.sh`
+  - Helper script to open and edit dynamic route YAML files in the user's preferred editor (e.g. `gnome-text-editor`, `vim`, `vi`).
+
+This is the model structure for edge routers, reverse proxies, and load balancers requiring dynamic route management, SSL certificate mounts, and Docker socket auto-discovery.
+
 ## Common folder archetypes
 
 ### 1. Compose-template service
@@ -227,6 +250,7 @@ Behavior:
 - Prefer the `mosquitto` pattern when initialization is required.
 - Prefer the `immich` pattern when using Docker Compose templates.
 - Prefer the `postgresql` pattern when the Dockerfile needs to be dynamically generated with optional features.
+- Prefer the `traefik` pattern when configuring an edge router, reverse proxy, or load balancer.
 - Always keep non-sensitive defaults in `public.env`.
 - Keep passwords and secrets in `.env` or as runtime environment variables.
 - Avoid substituting sensitive secret placeholders in generated compose files.
@@ -243,6 +267,21 @@ Behavior:
 5. If custom image build is required, add `Dockerfile`.
 6. Use `public.env` for defaults, `.env` for secrets.
 7. Follow `run.sh` conventions: source `../run-preprocess.tpl.sh`, support `--force`, support `--persist`.
+
+### Adding a new reverse proxy or load balancer
+
+When adding a new edge router, reverse proxy, or load balancer (e.g. Traefik, Nginx, Caddy, HAProxy, Envoy):
+
+1. **Shared Network**: Ensure the container attaches to `${NETWORK_NAME}` (e.g. `fznetwork`) so it can route traffic to backend containers in the `fzdocker` stack.
+2. **Ingress Port Binding**: Bind external host ports (e.g. `80`, `443`, and management/dashboard ports) via variables defined in `public.env` (`PORT_MAPPING`, `PORT_MAPPING_SECURE`, etc.).
+3. **Dynamic Route Configuration**:
+   - Provide a template/default config folder (`config/` or `conf.d/`).
+   - In `run.sh`, check if dynamic configuration directories exist, and copy default starter templates (e.g. `commons.yml`, service `.example.yml` files) on initial setup.
+4. **SSL/TLS Certificates**: Create and mount a local certificates directory (e.g. `./local/certs`) into the container's certificate store path.
+5. **Docker Provider & Container Discovery**:
+   - If using auto-discovery via Docker container labels (like Traefik), mount `/var/run/docker.sock:/var/run/docker.sock`.
+   - Set container auto-exposure to false by default (e.g. `--providers.docker.exposedbydefault=false`) so services are explicitly opt-in.
+6. **Management Helper Scripts**: Optionally provide an `edit.sh` or helper script to streamline editing dynamic route and SSL configuration files.
 
 ## Query guidance for the agent
 
