@@ -1,0 +1,22 @@
+http:
+  routers:
+    remark42-http:
+      rule: "Host(`comments.afzalex.com`)"
+      entryPoints:
+        - web
+      service: remark42-service
+      middlewares:
+        - common-redirect-to-https
+
+    remark42-https:
+      rule: "Host(`comments.afzalex.com`)"
+      entryPoints:
+        - websecure
+      service: remark42-service
+      tls: {}
+
+  services:
+    remark42-service:
+      loadBalancer:
+        servers:
+          - url: "http://fzremark42:8080"
