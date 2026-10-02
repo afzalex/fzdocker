@@ -13,6 +13,7 @@ if [[ " $@ " =~ " --force " ]]; then
 fi
 
 docker run --name ${CONTAINER_NAME} -it \
+    --user "$(id -u):$(id -g)" \
     --network "${NETWORK_NAME}" \
     --env-file "public.env" \
     --env-file ".env" \
