@@ -1,0 +1,15 @@
+# tinyauth.yml
+http:
+  routers:
+      tinyauth:
+        rule: Host(`auth.fzmacair.com`)
+        service: tinyauth-service
+      # middlewares:
+        # Uncomment this to enable HTTPS redirection
+        # - common-redirect-to-https
+
+  services:
+    tinyauth-service:
+      loadBalancer:
+        servers:
+          - url: "http://fztinyauth:3000"
