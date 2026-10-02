@@ -1,0 +1,18 @@
+# tinyauth-auth.yml
+# Adds a `tinyauth-auth` forwardAuth middleware backed by Tinyauth.
+# Attach it to any router to require Tinyauth login, e.g.:
+#   traefik.http.routers.<name>.middlewares: tinyauth-auth
+# or in a dynamic file-provider router:
+#   middlewares:
+#     - tinyauth-auth
+http:
+  middlewares:
+    tinyauth-auth:
+      forwardAuth:
+        address: "http://fztinyauth:3000/api/auth/traefik"
+        trustForwardHeader: true
+        authResponseHeaders:
+          - Remote-User
+          - Remote-Name
+          - Remote-Email
+          - Remote-Groups

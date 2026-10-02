@@ -1,7 +1,4 @@
 # silverbullet.yml
-# To support silverbullet, you need to run the silverbullet container with the following command:
-# fzdocker silverbullet --persist
-# And you need to include certificates in the certs directory.
 http:
   routers:
     silverbullet:
@@ -10,6 +7,7 @@ http:
       middlewares:
         # Uncomment this to enable HTTPS redirection
         # - common-redirect-to-https
+        # - tinyauth-auth
 
   services:
     silverbullet-service:
