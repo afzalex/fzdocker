@@ -1,0 +1,36 @@
+# aria2.yml
+# Start the combined Aria2 + AriaNg container first:
+# fzdocker aria2 run --persist
+#
+# For HTTP access through Traefik, set ARIA2RPCPORT=80 in aria2/public.env.
+# Use ARIA2RPCPORT=443 instead when this route is served over HTTPS.
+http:
+  routers:
+    aria2-redirect:
+      rule: Host(`localhost`) && Path(`/aria2`)
+      service: noop@internal
+      middlewares:
+        - common-add-slash
+      priority: 10000
+
+    aria2:
+      rule: Host(`localhost`) && (PathPrefix(`/aria2/`) || Path(`/jsonrpc`) || Path(`/rpc`))
+      service: aria2-service
+      middlewares:
+        # Uncomment this to enable HTTPS redirection
+        # - common-redirect-to-https
+        # Uncomment this to protect both AriaNg and its JSON-RPC endpoint
+        # - common-auth
+        - aria2-strip-prefix
+
+  middlewares:
+    aria2-strip-prefix:
+      stripPrefix:
+        prefixes:
+          - /aria2
+
+  services:
+    aria2-service:
+      loadBalancer:
+        servers:
+          - url: "http://fzaria2:8080"
