@@ -1,45 +1,30 @@
 #!/bin/bash
-# Runner for Aria2 + AriaNg
+# Runner for the combined Aria2 + AriaNg container
 
 source ../run-preprocess.tpl.sh
 
 mkdir -p ./local/downloads
 mkdir -p ./local/config
-mkdir -p ./local/AriaNg
 
-export UID
-export GID=${GID:-$(id -g)}
-
-if [ ! -f ./local/AriaNg/index.html ]; then
-    echo "Initializing AriaNg static files..."
-    ariang_container=$(docker create p3terx/ariang:latest)
-    docker cp "${ariang_container}:/AriaNg/." ./local/AriaNg/
-    docker rm "${ariang_container}"
-fi
-
-export RPC_SECRET_STANDARD_BASE64
-RPC_SECRET_STANDARD_BASE64=$(printf '%s' "${RPC_SECRET}" | base64 | tr -d '\n')
-
-envsubst '$RPC_SECRET_STANDARD_BASE64 $RPC_PORT' < ./config/aria2-connect.js.tpl > ./local/AriaNg/aria2-connect.js
-
-if ! grep -q 'aria2-connect.js' ./local/AriaNg/index.html; then
-    sed -i 's|<script src="js/aria-ng|<script src="aria2-connect.js"></script><script src="js/aria-ng|' ./local/AriaNg/index.html
-elif grep -q '<script src="aria2-connect.js"></script></head>' ./local/AriaNg/index.html; then
-    sed -i 's|<script src="aria2-connect.js"></script>||' ./local/AriaNg/index.html
-    sed -i 's|<script src="js/aria-ng|<script src="aria2-connect.js"></script><script src="js/aria-ng|' ./local/AriaNg/index.html
-fi
-
-envsubst < ./docker-compose.yml.tpl > ./docker-compose.yml
-
-# Remove existing containers if --force flag is used
+# Remove the current container and the legacy two-container deployment.
 if [[ " $@ " =~ " --force " ]]; then
-    echo "Removing existing aria2 containers..."
-    docker compose down --remove-orphans
+    echo "Removing existing ${CONTAINER_NAME} container(s)..."
+    docker rm -f "${CONTAINER_NAME}" "${CONTAINER_NAME}-aria2" 2>/dev/null || true
 fi
 
-# Run docker compose
-if [[ " $@ " =~ " --persist " ]]; then
-    docker compose up -d
-else
-    docker compose up
-fi
+exec docker run --name "${CONTAINER_NAME}" -it \
+    --network "${NETWORK_NAME}" \
+    --env-file "public.env" \
+    --env-file ".env" \
+    -e PUID="$(id -u)" \
+    -e PGID="$(id -g)" \
+    $(if [[ " $@ " =~ " --persist " ]]; then echo "--restart unless-stopped -d"; else echo "--rm"; fi) \
+    -p "${PORT_MAPPING}:8080" \
+    -p "${LISTEN_PORT_MAPPING}:${LISTEN_PORT}" \
+    -p "${LISTEN_PORT_MAPPING}:${LISTEN_PORT}/udp" \
+    -v "$(pwd)/local/config:/aria2/conf" \
+    -v "$(pwd)/local/downloads:/aria2/data" \
+    "${IMAGE_NAME}" \
+    --conf-path=/aria2/conf/aria2.conf \
+    --listen-port="${LISTEN_PORT}" \
+    --dht-listen-port="${LISTEN_PORT}"
